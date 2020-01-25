@@ -5,6 +5,7 @@ namespace App\Controller\ShoppyWebhooks;
 use App\Entity\Order;
 use App\SymfonyPayments\Interfaces\IWebhook;
 use App\SymfonyPayments\Logger\EnvAwareLogger;
+use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 use App\SymfonyPayments\Model\ShoppyModel;
 use App\SymfonyPayments\ShoppyClient;
 use App\SymfonyPayments\Utils\FieldUtils;
@@ -25,6 +26,13 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
         $this->entityManager = $entityManager;
         $this->logger = $envAwareLogger->getLogger();
         $this->shoppyClient = $client;
+    }
+
+    /**
+     * @Route("/")
+     */
+    public function homePage() {
+        return new Response("Hello World");
     }
 
     /**
@@ -54,7 +62,7 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
         return new Response();
     }
 
-    public function handlePurchase(ShoppyModel $shoppyModel) {
+    public function handlePurchase(IOnlineStoreModel $shoppyModel) {
         $order = new Order();
         $order->setFromModel($shoppyModel)->setPurchased("PLACEHOLDER");
         $this->entityManager->persist($order);

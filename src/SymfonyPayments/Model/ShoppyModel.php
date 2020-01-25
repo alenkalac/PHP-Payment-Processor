@@ -2,10 +2,9 @@
 
 namespace App\SymfonyPayments\Model;
 
-use App\SymfonyPayments\Utils\ShoppyUtils;
-use App\SymfonyPayments\Utils\WebhookUtils;
+use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 
-class ShoppyModel {
+class ShoppyModel implements IOnlineStoreModel{
     private $webhookStatus;
     private $data;
 

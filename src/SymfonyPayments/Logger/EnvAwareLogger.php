@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alen Kalac
- * Date: 26/11/2019
- * Time: 00:26
- */
-
 namespace App\SymfonyPayments\Logger;
 
 use Symfony\Component\HttpKernel\KernelInterface;

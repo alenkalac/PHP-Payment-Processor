@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Amel
- * Date: 24/11/2019
- * Time: 18:21
- */
-
 namespace App\SymfonyPayments\Utils;
 
 
