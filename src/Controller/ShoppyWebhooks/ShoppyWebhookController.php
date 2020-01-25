@@ -7,6 +7,8 @@ use App\SymfonyPayments\Interfaces\IWebhook;
 use App\SymfonyPayments\Logger\EnvAwareLogger;
 use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 use App\SymfonyPayments\Model\ShoppyModel;
+use App\SymfonyPayments\Selly\SellyClient;
+use App\SymfonyPayments\Selly\SellyPayment;
 use App\SymfonyPayments\ShoppyClient;
 use App\SymfonyPayments\Utils\FieldUtils;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,8 +33,12 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
     /**
      * @Route("/")
      */
-    public function homePage() {
-        return new Response("Hello World");
+    public function homePage(SellyClient $selly) {
+        $payment = new SellyPayment("TestPayment1", "test@gmail.com", "USD", 10, SellyPayment::GATEWAY_PAYPAL, "https://test.com");
+        $selly->auth("override", "override");
+        $sp = $selly->createPayment($payment);
+
+        dd($sp);
     }
 
     /**

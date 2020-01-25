@@ -123,9 +123,6 @@
     "rmccue/requests": {
         "version": "v1.7.0"
     },
-    "selly/selly-php": {
-        "version": "1.0.5"
-    },
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {
