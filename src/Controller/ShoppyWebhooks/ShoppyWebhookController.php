@@ -35,7 +35,7 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
      */
     public function homePage(SellyClient $selly) {
         $payment = new SellyPayment("TestPayment1", "test@gmail.com", "USD", 10, SellyPayment::GATEWAY_PAYPAL, "https://test.com");
-        $selly->auth("override", "override");
+        $selly->auth($_ENV["SELLY_EMAIL"], $_ENV["SELLY_API"]);
         $sp = $selly->createPayment($payment);
 
         dd($sp);

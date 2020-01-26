@@ -8,6 +8,9 @@ class SellyPayment {
     public const GATEWAY_PAYPAL = 'PayPal';
     public const GATEWAY_BITCOIN = 'Bitcoin';
 
+    public const CURRENCY_USD = "USD";
+    public const CURRENCY_EUR = "EUR";
+
     public function __construct($title, $email, $currency, $value, $gateway, $returnURL) {
         $this->arr["title"] = $title;
         $this->arr["email"] = $email;
