@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\ShoppyWebhooks;
+namespace App\Controller\ShoppyControllers;
 
 use App\Entity\Order;
 use App\SymfonyPayments\Interfaces\IWebhook;

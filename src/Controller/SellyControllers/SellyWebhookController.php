@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\SellyControllers;
 
 use App\SymfonyPayments\Interfaces\IWebhook;
 use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 class SellyWebhookController extends AbstractController implements IWebhook {
-
     public function onHandle(Request $request) {
         // TODO: Implement onHandle() method.
     }
