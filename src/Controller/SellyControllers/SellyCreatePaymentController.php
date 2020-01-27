@@ -29,7 +29,6 @@ class SellyCreatePaymentController extends AbstractController {
      * @return mixed
      */
     public function createPayment(Request $request) {
-
         $title = $request->get("title", false);
         $email = $request->get("email", false);
         $currency = $request->get("currency", false);
