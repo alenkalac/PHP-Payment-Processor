@@ -8,7 +8,6 @@
 
 namespace App\Controller\SellyControllers;
 
-
 use App\SymfonyPayments\Selly\SellyClient;
 use App\SymfonyPayments\Selly\SellyPayment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,19 +29,28 @@ class SellyCreatePaymentController extends AbstractController {
      * @return mixed
      */
     public function createPayment(Request $request) {
-        //todo error handling
-        $payment = new SellyPayment(
-            $request->get("title"),
-            $request->get("email"),
-            $request->get("currency"),
-            $request->get("value"),
-            $request->get("gateway"),
-            $request->get("returnURL"));
 
-        //todo: add optional values
+        $title = $request->get("title", false);
+        $email = $request->get("email", false);
+        $currency = $request->get("currency", false);
+        $value = $request->get("value", false);
+        $gateway = $request->get("gateway", false);
+        $returnURL = $request->get("returnURL", false);
+
+        if(!$title || !$email || !$currency || !$value || !$gateway || !$returnURL) {
+            return new Response(json_encode([
+                "error" => "Missing Required Fields"
+            ]));
+        }
+
+        $payment = new SellyPayment($title, $email, $currency, $value, $gateway, $returnURL);
+
+        if($request->get("webhook_url", false)) {
+            $payment->setWebhookUrl($request->get("webhook_url"));
+        }
+
         $result = $this->sellyClient->createPayment($payment);
 
-        //dd($result);
         return new Response($result->url);
     }
 }
