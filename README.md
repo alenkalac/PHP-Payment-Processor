@@ -1,5 +1,11 @@
 ## Payment Gateway MicroService
 
+#### Supported 3rd Party Payment Services
+* Selly
+* Shoppy
+* PayPal
+* CashApp
+
 API Guide
 Create a payment  
 
