@@ -1,7 +1,6 @@
 <?php
 namespace App\SymfonyPayments\Selly;
 
-
 class SellyPayment {
     private $arr = [];
 

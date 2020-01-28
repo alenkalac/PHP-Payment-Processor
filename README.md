@@ -7,7 +7,8 @@
 * CashApp
 
 API Guide
-Create a payment  
+
+##### Create a payment  
 
 ```
 GET /api/selly/payment

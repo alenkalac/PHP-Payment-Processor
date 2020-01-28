@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\SymfonyPayments\Model\ShoppyModel;
+use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -146,13 +146,13 @@ class Order
         return $this;
     }
 
-    public function setFromModel(ShoppyModel $shoppyModel) {
-        $this->setEmail($shoppyModel->getEmail())
-            ->setOrderId($shoppyModel->getOrderId())
-            ->setGateway($shoppyModel->getGateway())
-            ->setPrice($shoppyModel->getPrice())
-            ->setCurrency($shoppyModel->getCurrency())
-            ->setTime($shoppyModel->getUnixTimestamp());
+    public function setFromModel(IOnlineStoreModel $model) {
+        $this->setEmail($model->getEmail())
+            ->setOrderId($model->getOrderId())
+            ->setGateway($model->getGateway())
+            ->setPrice($model->getPrice())
+            ->setCurrency($model->getCurrency())
+            ->setTime($model->getUnixTimestamp());
 
         return $this;
     }

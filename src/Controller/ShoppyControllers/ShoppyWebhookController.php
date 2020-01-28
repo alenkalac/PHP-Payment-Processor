@@ -7,9 +7,7 @@ use App\SymfonyPayments\Interfaces\IWebhook;
 use App\SymfonyPayments\Logger\EnvAwareLogger;
 use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 use App\SymfonyPayments\Model\ShoppyModel;
-use App\SymfonyPayments\Selly\SellyClient;
-use App\SymfonyPayments\Selly\SellyPayment;
-use App\SymfonyPayments\ShoppyClient;
+use App\SymfonyPayments\StoreManager;
 use App\SymfonyPayments\Utils\FieldUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,23 +20,12 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
 {
     private $entityManager;
     private $logger;
-    private $shoppyClient;
+    private $storeManager;
 
-    public function __construct(EntityManagerInterface $entityManager, EnvAwareLogger $envAwareLogger, ShoppyClient $client) {
+    public function __construct(EntityManagerInterface $entityManager, EnvAwareLogger $envAwareLogger, StoreManager $storeManager) {
         $this->entityManager = $entityManager;
         $this->logger = $envAwareLogger->getLogger();
-        $this->shoppyClient = $client;
-    }
-
-    /**
-     * @Route("/")
-     */
-    public function homePage(SellyClient $selly) {
-        $payment = new SellyPayment("TestPayment1", "test@gmail.com", "USD", 10, SellyPayment::GATEWAY_PAYPAL, "https://test.com");
-        $selly->auth($_ENV["SELLY_EMAIL"], $_ENV["SELLY_API"]);
-        $sp = $selly->createPayment($payment);
-
-        dd($sp);
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -47,7 +34,7 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
      * @return Response
      */
     public function onHandle(Request $request) {
-        $this->shoppyClient->verifyHmac($request->getContent(), $_ENV["SHOPPY_API_SECRET"], $request->headers->get('X-SHOPPY-SIGNATURE', ''));
+        $this->storeManager->verifyHmac($request->getContent(), $_ENV["SHOPPY_API_SECRET"], $request->headers->get('X-SHOPPY-SIGNATURE', ''));
 
         $data = FieldUtils::getSafeJson($request->getContent());
 
@@ -61,7 +48,7 @@ class ShoppyWebhookController extends AbstractController implements IWebhook
         }
 
         if ($webhookStatus == 200) {
-            $this->shoppyClient->handleDispute($shoppyModel);
+            $this->storeManager->handleDispute($shoppyModel);
             throw new BadRequestHttpException("Dispute handled.");
         }
 

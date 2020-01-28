@@ -3,11 +3,11 @@ namespace App\SymfonyPayments;
 
 use App\Entity\Dispute;
 use App\SymfonyPayments\Logger\EnvAwareLogger;
-use App\SymfonyPayments\Model\ShoppyModel;
+use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class ShoppyClient {
+class StoreManager {
     private $entityManager;
     private $logger;
 
@@ -31,21 +31,21 @@ class ShoppyClient {
         throw new UnauthorizedHttpException("Hmac Verification Failed!");
     }
 
-    public function handleDispute(ShoppyModel $shoppyModel) {
+    public function handleDispute(IOnlineStoreModel $storeModel) {
         $disputeEntity = new Dispute();
         $disputeEntity
-            ->setEmail($shoppyModel->getEmail())
-            ->setOrderId($shoppyModel->getOrderId())
-            ->setPrice($shoppyModel->getPrice())
-            ->setCurrency($shoppyModel->getCurrency())
-            ->setGateway($shoppyModel->getGateway())
+            ->setEmail($storeModel->getEmail())
+            ->setOrderId($storeModel->getOrderId())
+            ->setPrice($storeModel->getPrice())
+            ->setCurrency($storeModel->getCurrency())
+            ->setGateway($storeModel->getGateway())
             ->setDisputeAt(time());
 
         $this->entityManager->persist($disputeEntity);
         $this->entityManager->flush();
     }
 
-    public function checkHasDisputedBefore(ShoppyModel $shoppyModel) {
+    public function checkHasDisputedBefore(IOnlineStoreModel $storeModel) {
         //Check if dispute was done by this gamer tag before
     }
 }
