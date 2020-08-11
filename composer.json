@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.5",
+        "nelmio/cors-bundle": "^2.1",
         "nopjmp/discord-webhooks": "^0.3.1",
         "rmccue/requests": "^1.7",
         "symfony/apache-pack": "^1.0",
