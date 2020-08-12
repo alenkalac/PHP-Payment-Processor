@@ -1,8 +1,7 @@
 <?php
-namespace App\SymfonyPayments\PayPal;
+namespace App\SymfonyPayments\PayPal\Order;
 
 use App\SymfonyPayments\PayPal\interfaces\PayPalBuilderInterface;
-use App\SymfonyPayments\PayPal\Order\PayPalItem;
 
 class PayPalOrderBuilder implements PayPalBuilderInterface {
 

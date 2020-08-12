@@ -1,6 +1,6 @@
 <?php
 
-namespace App\SymfonyPayments\PayPal;
+namespace App\SymfonyPayments\PayPal\Payment;
 
 use App\SymfonyPayments\PayPal\interfaces\PayPalBuilderInterface;
 
