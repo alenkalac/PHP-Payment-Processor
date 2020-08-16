@@ -16,11 +16,17 @@ PAYPAL_CLIENT_SECRET=
 These examples are from a symfony project, and can be adapted to suit any language/framework.
 ```php
 
+    private $paypalClient;
+    
+    public function __construct() {
+        $this->paypalClient = new SymfonyPaymentsPayPalClient("http://localhost:8777");
+    }
+
     /**
      * @Route("/checkout/create", methods={"POST"})
      */
-    public function createPayment(Request $request, PayPalApi $payPalApi) {
-        $data = json_decode($payPalApi->createPayment("2.99", null, "http://localhost/success", "http://localhost/cancel"));
+    public function createPayment(Request $request) {
+        $data = json_decode($this->paypalClient->createPayment("2.99", null, "http://localhost/success", "http://localhost/cancel"));
         
         //At this point you'll have an orderId
         //save it to database with any additional info that you might want to
@@ -32,14 +38,14 @@ These examples are from a symfony project, and can be adapted to suit any langua
     /**
      * @Route("/checkout/complete", methods={"POST"})
      */
-    public function completeCheckout(Request $request, PayPalApi $payPalApi) {
+    public function completeCheckout(Request $request) {
         $data = json_decode($request->getContent(), true);
 
-        $payerId = $data["PayerID"];
-        $orderId = $data["OrderID"];
+        $payerId = $data["payerID"];
+        $orderId = $data["orderID"];
 
-        $response = $payPalApi->completePayment($payerId, $orderId, "http://localhost/checkout/refund");
-        if($response->getStatus() == $payPalApi::STATUS_COMPLETED) {
+        $response = $this->paypalClient->completePayment($payerId, $orderId);
+        if($response->getStatus() == $this->paypalClient::STATUS_COMPLETED) {
             //handle successful payment.
             //query database for products associated with the orderId
             return new Response("");
@@ -90,8 +96,8 @@ paypal.Button.render({
             return fetch('/checkout/complete', {
                 method: "POST",
                 body: JSON.stringify({
-                    OrderID: data.orderID,
-                    PayerID: data.payerID
+                    orderID: data.orderID,
+                    payerID: data.payerID
                 })
             }).then(res => {
                 if(!res.ok) {
