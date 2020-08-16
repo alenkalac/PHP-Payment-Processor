@@ -94,6 +94,7 @@ class PayPalOrder implements PayPalTransactionInterface {
         $body['application_context'] = [
             "return_url" => $this->getReturnUrl(),
             "cancel_url" => $this->getCancelUrl(),
+            "shipping_preference" => "NO_SHIPPING",
         ];
         $body['purchase_units'] = [];
         $body['purchase_units'][] = [
@@ -128,49 +129,5 @@ class PayPalOrder implements PayPalTransactionInterface {
         }
 
         return $body;
-
-        /*
-        return [
-            "intent" => "CAPTURE",
-            'application_context' => [
-                "return_url" => $this->getReturnUrl(),
-                "cancel_url" => $this->getCancelUrl(),
-            ],
-            "purchase_units" => [
-                [
-                    "amount" => [
-                        "currency_code" => $this->getCurrency(),
-                        "value" => $this->getAmount(),
-                        "breakdown" => [
-                            "item_total" => [
-                                "value" => $this->getAmount(),
-                                "currency_code" => $this->getCurrency()
-                            ]
-                        ]
-                    ],
-                    "items" => [
-                        [
-                            "name" => "instagram post",
-                            "unit_amount" => [
-                                "value" => "5.00",
-                                "currency_code" => $this->getCurrency()
-                            ],
-                            "quantity" => 1,
-                            "description" => "http://lol.com"
-                        ],
-                        [
-                            "name" => "instagram post 2",
-                            "unit_amount" => [
-                                "value" => "5.00",
-                                "currency_code" => $this->getCurrency()
-                            ],
-                            "quantity" => 1,
-                            "description" => "http://lol.com"
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        */
     }
 }

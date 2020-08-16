@@ -1,7 +1,9 @@
 <?php
 namespace App\Controller\PayPalControllers;
 
+use App\Entity\PayPalOrder;
 use App\Entity\ServerVariables;
+use App\SymfonyPayments\Model\PayPalModel;
 use App\SymfonyPayments\PayPal\Order\PayPalItem;
 use App\SymfonyPayments\PayPal\PayPalClient;
 use Exception;
@@ -59,14 +61,21 @@ class PayPalCreatePaymentController extends AbstractController {
     }
 
     /**
-     * @Route("/api/paypal/payment/success")
+     * @Route("/api/paypal/payment", methods={"PUT", "GET"})
      * @param Request $request
      * @param PayPalClient $client
      * @return JsonResponse
      */
-    public function successPayment(Request $request, PayPalClient $client) {
-        $payerId = $request->get(PayPalClient::FIELD_PAYER_ID);
-        $orderId = $request->get(PayPalClient::FIELD_ORDER_ID);
+    public function completePayPalPayment(Request $request, PayPalClient $client) {
+        $data = json_decode($request->getContent(), true);
+
+        $payerId = $data[PayPalClient::FIELD_PAYER_ID];
+        $orderId = $data[PayPalClient::FIELD_ORDER_ID];
+        $refundCallback = null;
+
+        if(key_exists("refund_callback", $data)) {
+            $refundCallback = $data['refund_callback'];
+        }
 
         $transaction = $client->getPaymentBuilder()
             ->setPayerId($payerId)
@@ -75,7 +84,20 @@ class PayPalCreatePaymentController extends AbstractController {
 
         $data = $this->executeTransaction($client, $transaction);
 
-        return new JsonResponse($data);
+        $model = new PayPalModel($data);
+
+        if($refundCallback != null) {
+            $ppOrder = new PayPalOrder();
+            $ppOrder->setStatus($model->getStatus());
+            $ppOrder->setOrderId($model->getOrderId());
+            $ppOrder->setTransactionId($model->getTransactionId());
+            $ppOrder->setRefundCallback($refundCallback);
+
+            $this->getDoctrine()->getManager()->persist($ppOrder);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        return new JsonResponse($model->getResponseData());
     }
 
     private function getAccessToken($paypalClient, $newToken = false) {

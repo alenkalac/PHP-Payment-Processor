@@ -17,8 +17,8 @@ class PayPalClient {
     public const FIELD_RETURN_URL = "return_url";
     public const FIELD_CANCEL_URL = "cancel_url";
 
-    public const FIELD_PAYER_ID = "PayerID";
-    public const FIELD_ORDER_ID = "OrderID";
+    public const FIELD_PAYER_ID = "payerID";
+    public const FIELD_ORDER_ID = "orderID";
 
     private $isSandbox = false;
 
@@ -82,8 +82,6 @@ class PayPalClient {
             ],
             "body" => empty($transaction->getRequestBody()) ? "" : json_encode($transaction->getRequestBody())
         ]);
-
-        $b = $transaction->getRequestBody();
 
         return json_decode($result->getBody()->getContents());
     }
