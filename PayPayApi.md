@@ -13,6 +13,11 @@ PAYPAL_CLIENT_SECRET=
 ### Front End
 
 #### Front End Controllers/Routes
+Download SymfonyPaymentsClient with composer
+```
+composer require alenkalac/symfony-payments-client
+```
+
 These examples are from a symfony project, and can be adapted to suit any language/framework.
 ```php
 
