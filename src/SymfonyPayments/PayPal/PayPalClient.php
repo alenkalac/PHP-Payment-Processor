@@ -1,7 +1,7 @@
 <?php
 namespace App\SymfonyPayments\PayPal;
 
-use App\SymfonyPayments\PayPal\interfaces\PayPalTransactionInterface;
+use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 use App\SymfonyPayments\PayPal\Order\PayPalOrderBuilder;
 use App\SymfonyPayments\PayPal\Payment\PayPalPaymentBuilder;
 use GuzzleHttp\Client;

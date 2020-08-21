@@ -2,7 +2,7 @@
 
 namespace App\SymfonyPayments\PayPal\Order;
 
-use App\SymfonyPayments\PayPal\interfaces\PayPalTransactionInterface;
+use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 
 class PayPalOrder implements PayPalTransactionInterface {
 

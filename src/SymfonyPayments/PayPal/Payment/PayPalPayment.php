@@ -1,7 +1,7 @@
 <?php
 namespace App\SymfonyPayments\PayPal\Payment;
 
-use App\SymfonyPayments\PayPal\interfaces\PayPalTransactionInterface;
+use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 
 class PayPalPayment implements PayPalTransactionInterface {
 

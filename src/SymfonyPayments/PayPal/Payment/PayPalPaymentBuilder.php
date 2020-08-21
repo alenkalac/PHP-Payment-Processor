@@ -2,7 +2,7 @@
 
 namespace App\SymfonyPayments\PayPal\Payment;
 
-use App\SymfonyPayments\PayPal\interfaces\PayPalBuilderInterface;
+use App\SymfonyPayments\PayPal\Interfaces\PayPalBuilderInterface;
 
 class PayPalPaymentBuilder implements PayPalBuilderInterface {
 
