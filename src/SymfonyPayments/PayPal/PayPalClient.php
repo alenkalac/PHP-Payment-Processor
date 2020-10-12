@@ -69,7 +69,7 @@ class PayPalClient {
      * set to true to disable sandbox mode
      */
     public function setSandboxMode($isSandbox) {
-        $this->isSandbox = $isSandbox;
+        $this->isSandbox = filter_var($isSandbox, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function execute($assessToken, PayPalTransactionInterface $transaction) {
