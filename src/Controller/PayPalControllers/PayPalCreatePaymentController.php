@@ -12,7 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PayPalCreatePaymentController extends AbstractController {
+class PayPalCreatePaymentController extends AbstractController
+{
 
     private $required_fields = [
         PayPalClient::FIELD_AMOUNT,
@@ -28,9 +29,9 @@ class PayPalCreatePaymentController extends AbstractController {
      * @return JsonResponse|void
      * @throws Exception
      */
-    public function createPayPalPayment(Request $request, PayPalClient $client) {
-
-        if(0 !== strpos($request->headers->get("Content-Type"), "application/json")) {
+    public function createPayPalPayment(Request $request, PayPalClient $client)
+    {
+        if (0 !== strpos($request->headers->get("Content-Type"), "application/json")) {
             return;
         }
 
@@ -44,7 +45,7 @@ class PayPalCreatePaymentController extends AbstractController {
             ->setCancelUrl($data[PayPalClient::FIELD_CANCEL_URL])
             ->setReturnUrl($data[PayPalClient::FIELD_RETURN_URL]);
 
-        if(array_key_exists("items", $data)) {
+        if (array_key_exists("items", $data)) {
             foreach ($data['items'] as $item) {
                 $ppItem = new PayPalItem();
                 $ppItem->setName($item['name']);
@@ -66,14 +67,15 @@ class PayPalCreatePaymentController extends AbstractController {
      * @param PayPalClient $client
      * @return JsonResponse
      */
-    public function completePayPalPayment(Request $request, PayPalClient $client) {
+    public function completePayPalPayment(Request $request, PayPalClient $client)
+    {
         $data = json_decode($request->getContent(), true);
 
         $payerId = $data[PayPalClient::FIELD_PAYER_ID];
         $orderId = $data[PayPalClient::FIELD_ORDER_ID];
         $refundCallback = null;
 
-        if(key_exists("refund_callback", $data)) {
+        if (key_exists("refund_callback", $data)) {
             $refundCallback = $data['refund_callback'];
         }
 
@@ -86,7 +88,7 @@ class PayPalCreatePaymentController extends AbstractController {
 
         $model = new PayPalModel($data);
 
-        if($refundCallback != null) {
+        if ($refundCallback != null) {
             $ppOrder = new PayPalOrder();
             $ppOrder->setStatus($model->getStatus());
             $ppOrder->setOrderId($model->getOrderId());
@@ -100,7 +102,8 @@ class PayPalCreatePaymentController extends AbstractController {
         return new JsonResponse($model->getResponseData());
     }
 
-    private function getAccessToken($paypalClient, $newToken = false) {
+    private function getAccessToken($paypalClient, $newToken = false)
+    {
         $repository = $this->getDoctrine()->getRepository(ServerVariables::class);
 
         $serverPayPalVariable = $repository->findOneBy([
@@ -109,7 +112,7 @@ class PayPalCreatePaymentController extends AbstractController {
 
         $accessToken = null;
 
-        if($serverPayPalVariable == null || $newToken) {
+        if ($serverPayPalVariable == null || $newToken) {
             $accessToken = $paypalClient->authenticate($_ENV["PAYPAL_CLIENT_ID"], $_ENV["PAYPAL_CLIENT_SECRET"]);
             $serverPayPalVariable = $serverPayPalVariable == null ? new ServerVariables() : $serverPayPalVariable;
             $serverPayPalVariable->setProperty("PAYPAL_ACCESS_TOKEN");
@@ -122,7 +125,8 @@ class PayPalCreatePaymentController extends AbstractController {
         return $accessToken;
     }
 
-    private function executeTransaction(PayPalClient $client, $transaction) {
+    private function executeTransaction(PayPalClient $client, $transaction)
+    {
         $client->setSandboxMode($_ENV["PAYPAL_SANDBOX"]);
         $accessToken = $this->getAccessToken($client);
 
@@ -140,12 +144,12 @@ class PayPalCreatePaymentController extends AbstractController {
      * @param $data
      * @throws Exception
      */
-    private function validate($data) {
+    private function validate($data)
+    {
         foreach ($this->required_fields as $field) {
-            if(!array_key_exists($field, $data)) {
+            if (!array_key_exists($field, $data)) {
                 throw new Exception("Required Key Not Found");
             }
         }
     }
-
 }

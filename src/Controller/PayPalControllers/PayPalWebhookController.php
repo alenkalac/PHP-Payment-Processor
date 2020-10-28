@@ -64,5 +64,4 @@ class PayPalWebhookController extends AbstractController {
 
         return new Response();
     }
-
 }

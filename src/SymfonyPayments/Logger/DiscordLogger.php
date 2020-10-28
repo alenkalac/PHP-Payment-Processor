@@ -1,8 +1,10 @@
 <?php
+
 namespace App\SymfonyPayments\Logger;
 
 use DiscordWebhooks\Client;
 use DiscordWebhooks\Embed;
+use Exception;
 
 class DiscordLogger implements HyperLogger {
     private const LOGGER_NAME = "discord";
@@ -18,8 +20,10 @@ class DiscordLogger implements HyperLogger {
 
             $dClient->embed($embed)->send();
         }
-        catch (\Exception $e) {
-
+        catch (Exception $e) {
+            /**
+             * Add fallback
+             */
         }
     }
 
