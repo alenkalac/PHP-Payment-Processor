@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,8 +23,8 @@ class OrderRepository extends ServiceEntityRepository
 
     /**
      * @return mixed
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function getCount() {
         $result = $this->createQueryBuilder('t')
