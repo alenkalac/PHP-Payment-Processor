@@ -1,14 +1,10 @@
 <?php
 
-
 namespace App\SymfonyPayments\Model;
-
 
 use App\SymfonyPayments\Model\Interfaces\IOnlineStoreModel;
 
 class PayPalModel implements IOnlineStoreModel {
-
-    private $webhookStatus;
     private $data;
 
     public function __construct($data){
