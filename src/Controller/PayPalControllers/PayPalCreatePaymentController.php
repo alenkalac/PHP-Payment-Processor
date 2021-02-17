@@ -3,13 +3,17 @@ namespace App\Controller\PayPalControllers;
 
 use App\Entity\PayPalOrder;
 use App\Entity\ServerVariables;
+use App\Repository\PayPalOrderRepository;
+use App\SymfonyPayments\HttpClient;
 use App\SymfonyPayments\Model\PayPalModel;
 use App\SymfonyPayments\PayPal\Order\PayPalItem;
+use App\SymfonyPayments\PayPal\Payment\PayPalPaymentRefund;
 use App\SymfonyPayments\PayPal\PayPalClient;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PayPalCreatePaymentController extends AbstractController {
@@ -25,13 +29,13 @@ class PayPalCreatePaymentController extends AbstractController {
      * @Route("/api/paypal/payment", methods={"POST", "OPTIONS"})
      * @param Request $request
      * @param PayPalClient $client
-     * @return JsonResponse|void
+     * @return JsonResponse|Response
      * @throws Exception
      */
     public function createPayPalPayment(Request $request, PayPalClient $client) {
 
         if(0 !== strpos($request->headers->get("Content-Type"), "application/json")) {
-            return;
+            return new Response("", 401);
         }
 
         $data = json_decode($request->getContent(), true);
@@ -99,6 +103,51 @@ class PayPalCreatePaymentController extends AbstractController {
 
         return new JsonResponse($model->getResponseData());
     }
+
+    /**
+     * @Route("/api/paypal/refund/{tid}")
+     * @param Request $request
+     * @param PayPalClient $client
+     * @param PayPalOrderRepository $orders
+     * @param HttpClient $httpClient
+     * @return JsonResponse
+     */
+    public function refund(Request $request, PayPalClient $client, PayPalOrderRepository $orders, HttpClient $httpClient) {
+
+        $transactionId = $request->get("tid", false);
+
+        //find the paypal order
+        $order = $orders->findOneBy([
+            "status" => "COMPLETED",
+            "transactionId" =>  $transactionId
+        ]);
+
+        $data = [];
+
+        if($order) {
+            $paypalRefund = new PayPalPaymentRefund($order->getTransactionId());
+            $data = $this->executeTransaction($client, $paypalRefund);
+        }
+
+        if($data["status"] === "COMPLETED") {
+            //TODO: Create a callback http client, but for now it's fine
+            $order->setStatus("REFUNDED");
+
+            $this->getDoctrine()->getManager()->persist($order);
+            $this->getDoctrine()->getManager()->flush();
+
+            $httpClient->post($order->getRefundCallback(), [
+                "headers" => [
+                    "content-type" => "application/json"
+                ],
+                "body" => json_encode($data)
+            ]);
+        }
+
+        return new JsonResponse($data);
+
+    }
+
 
     private function getAccessToken($paypalClient, $newToken = false) {
         $repository = $this->getDoctrine()->getRepository(ServerVariables::class);

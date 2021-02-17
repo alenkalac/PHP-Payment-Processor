@@ -4,7 +4,6 @@ namespace App\SymfonyPayments\PayPal\Payment;
 use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 
 class PayPalPayment implements PayPalTransactionInterface {
-
     private const PAYMENT_URL = "/v2/checkout/orders/";
     private const CAPTURE_PART = "/capture";
 
@@ -39,7 +38,7 @@ class PayPalPayment implements PayPalTransactionInterface {
         return [];
     }
 
-    public function getCaptureUrl(){
+    public function getUrl(){
         return self::PAYMENT_URL . $this->orderId . self::CAPTURE_PART;
     }
 }

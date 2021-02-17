@@ -34,7 +34,7 @@ class PayPalClient {
     }
 
     public function authenticate($clientId, $clientSecret) {
-        $response = $this->client->post($this->getUrl() . self::AUTH_URL, [
+        $response = $this->client->post($this->getUri() . self::AUTH_URL, [
             "headers" => [
                 "Accept" => "application/json",
                 "Content-Type" => "application/x-www-form-urlencoded",
@@ -73,7 +73,7 @@ class PayPalClient {
     }
 
     public function execute($assessToken, PayPalTransactionInterface $transaction) {
-        $url = $this->getUrl() . $transaction->getCaptureUrl();
+        $url = $this->getUri() . $transaction->getUrl();
 
         $result = $this->client->post($url, [
             "headers" => [
@@ -90,7 +90,7 @@ class PayPalClient {
     /*
      * private fields
      */
-    private function getUrl() {
+    private function getUri() {
         return $this->isSandbox ? self::PAYPAL_SANDBOX_URL : self::PAYPAL_LIVE_URL;
     }
 }

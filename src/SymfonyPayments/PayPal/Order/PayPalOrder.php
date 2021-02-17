@@ -84,7 +84,7 @@ class PayPalOrder implements PayPalTransactionInterface {
         $this->items[] = $items;
     }
 
-    public function getCaptureUrl(){
+    public function getUrl(){
         return self::CHECKOUT_URL;
     }
 

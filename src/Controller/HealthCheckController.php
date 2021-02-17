@@ -20,8 +20,7 @@ class HealthCheckController extends AbstractController
     /**
      * @Route("/api/healthy")
      */
-    public function onHealthCheck()
-    {
+    public function onHealthCheck() {
         $healthCheckRepository = $this->entityManager->getRepository(HealthCheck::class);
 
         try {
