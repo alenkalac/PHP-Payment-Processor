@@ -1,0 +1,13 @@
+/node_modules
+/bin/.phpunit
+/bin/phpunit
+/vendor
+/migrations/*
+/var/*
+.env.local
+.env.test
+/tests
+/public/blog
+/public/build
+/.git
+/.idea
