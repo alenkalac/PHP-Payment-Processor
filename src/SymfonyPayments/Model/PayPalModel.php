@@ -55,6 +55,10 @@ class PayPalModel implements IOnlineStoreModel {
         return $this->data->purchase_units[0]->payments->captures[0]->create_time;
     }
 
+    public function getPayer() {
+        return $this->data->payer;
+    }
+
     public function getResponseData() {
         return [
             "orderId" => $this->getOrderId(),
@@ -62,7 +66,7 @@ class PayPalModel implements IOnlineStoreModel {
             "amount" => $this->getPrice(),
             "status" => $this->getStatus(),
             "timestamp" => $this->getUnixTimestamp(),
-            "payer_email" => $this->getEmail()
+            "payer" => json_decode($this->getPayer())
         ];
     }
 }
