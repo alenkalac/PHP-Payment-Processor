@@ -60,13 +60,14 @@ class PayPalModel implements IOnlineStoreModel {
     }
 
     public function getResponseData() {
-        return [
+        $d = [
             "orderId" => $this->getOrderId(),
             "transactionId" => $this->getTransactionId(),
             "amount" => $this->getPrice(),
             "status" => $this->getStatus(),
             "timestamp" => $this->getUnixTimestamp(),
-            "payer" => json_decode($this->getPayer())
+            "payer" => json_encode($this->getPayer())
         ];
+        return $d;
     }
 }
