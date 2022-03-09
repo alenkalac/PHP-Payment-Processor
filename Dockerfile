@@ -19,13 +19,10 @@ RUN sed -ri -e 's!/var/www/html!/app/public!g' /etc/apache2/sites-available/*.co
 
 COPY . .
 
-VOLUME /app/var
-
 RUN PATH=$PATH:/app/vendor/bin:bin
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN composer install --no-scripts --prefer-dist --no-interaction \
-    && chown www-data:www-data -R /app/var
+RUN composer install --no-scripts --prefer-dist --no-interaction
 
 RUN chmod +x /app/entry-point.sh && sed -i -e 's/\r$//' /app/entry-point.sh
 
