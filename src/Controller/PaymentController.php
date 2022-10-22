@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\SymfonyPayments\PaymentProcessors;
-use App\SymfonyPayments\Processors\PaymentProcessorNotFoundException;
+use App\Payments\PaymentProcessors;
+use App\Payments\Processors\PaymentProcessorNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
