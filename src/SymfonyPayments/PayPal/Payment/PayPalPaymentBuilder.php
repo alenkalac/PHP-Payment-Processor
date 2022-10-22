@@ -22,7 +22,7 @@ class PayPalPaymentBuilder implements PayPalBuilderInterface {
         return $this;
     }
 
-    public function build() {
+    public function build(): PayPalPayment {
         return $this->payPalPayment;
     }
 }

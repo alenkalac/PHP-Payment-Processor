@@ -4,6 +4,7 @@ namespace App\SymfonyPayments\PayPal;
 use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 use App\SymfonyPayments\PayPal\Order\PayPalOrderBuilder;
 use App\SymfonyPayments\PayPal\Payment\PayPalPaymentBuilder;
+use Exception;
 use GuzzleHttp\Client;
 
 class PayPalClient {
@@ -33,6 +34,9 @@ class PayPalClient {
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function authenticate($clientId, $clientSecret) {
         $response = $this->client->post($this->getUri() . self::AUTH_URL, [
             "headers" => [
@@ -53,14 +57,14 @@ class PayPalClient {
             return $json->access_token;
         }
 
-        throw new \Exception("Bad tokens");
+        throw new Exception("Bad tokens");
     }
 
-    public function getOrderBuilder() {
+    public function getOrderBuilder(): PayPalOrderBuilder {
         return new PayPalOrderBuilder();
     }
 
-    public function getPaymentBuilder() {
+    public function getPaymentBuilder(): PayPalPaymentBuilder {
         return new PayPalPaymentBuilder();
     }
 
@@ -90,7 +94,7 @@ class PayPalClient {
     /*
      * private fields
      */
-    private function getUri() {
+    private function getUri(): string {
         return $this->isSandbox ? self::PAYPAL_SANDBOX_URL : self::PAYPAL_LIVE_URL;
     }
 }

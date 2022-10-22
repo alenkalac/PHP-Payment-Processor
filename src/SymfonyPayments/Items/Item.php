@@ -1,7 +1,8 @@
 <?php
-namespace App\SymfonyPayments\PayPal\Order;
 
-class PayPalItem {
+namespace App\SymfonyPayments\Items;
+
+class Item {
     private $name;
     private $desc;
     private $unitAmount;
@@ -70,6 +71,4 @@ class PayPalItem {
     {
         $this->quantity = $quantity;
     }
-
-
 }

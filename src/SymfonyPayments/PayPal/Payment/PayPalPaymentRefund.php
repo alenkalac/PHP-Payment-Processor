@@ -6,7 +6,7 @@ use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 class PayPalPaymentRefund implements PayPalTransactionInterface {
 
     private const PAYMENT_URL = "/v2/payments/captures/";
-    private const ENDPART_PART = "/refund";
+    private const END_PART = "/refund";
 
     private $transactionId;
 
@@ -14,11 +14,11 @@ class PayPalPaymentRefund implements PayPalTransactionInterface {
         $this->transactionId = $transactionId;
     }
 
-    public function getUrl() {
-        return self::PAYMENT_URL . $this->transactionId . self::ENDPART_PART;
+    public function getUrl(): string {
+        return self::PAYMENT_URL . $this->transactionId . self::END_PART;
     }
 
-    public function getRequestBody() {
+    public function getRequestBody(): string {
         return "";
     }
 }

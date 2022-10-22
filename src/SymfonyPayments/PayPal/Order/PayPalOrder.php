@@ -2,6 +2,7 @@
 
 namespace App\SymfonyPayments\PayPal\Order;
 
+use App\SymfonyPayments\Items\Item;
 use App\SymfonyPayments\PayPal\Interfaces\PayPalTransactionInterface;
 
 class PayPalOrder implements PayPalTransactionInterface {
@@ -78,17 +79,17 @@ class PayPalOrder implements PayPalTransactionInterface {
     }
 
     /**
-     * @param PayPalItem $items
+     * @param Item $items
      */
-    public function addItem(PayPalItem $items): void {
+    public function addItem(Item $items): void {
         $this->items[] = $items;
     }
 
-    public function getUrl(){
+    public function getUrl(): string {
         return self::CHECKOUT_URL;
     }
 
-    public function getRequestBody() {
+    public function getRequestBody(): array {
         $body = [];
         $body['intent'] = "CAPTURE";
         $body['application_context'] = [
@@ -114,7 +115,7 @@ class PayPalOrder implements PayPalTransactionInterface {
 
             $body['purchase_units'][0]['items'] = [];
 
-            /** @var PayPalItem $item */
+            /** @var Item $item */
             foreach ($this->getItems() as $item) {
                 $body['purchase_units'][0]['items'][] = [
                     "name" => $item->getName(),

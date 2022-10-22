@@ -15,7 +15,7 @@ class PayPalWebhookController extends AbstractController {
      * @param Request $request
      * @return Response
      */
-    public function payPalWebhook(Request $request) {
+    public function payPalWebhook(Request $request): Response {
 
         $httpClient = new Client();
         $data = json_decode($request->getContent());

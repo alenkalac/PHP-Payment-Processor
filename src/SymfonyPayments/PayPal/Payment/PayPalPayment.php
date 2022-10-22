@@ -34,11 +34,11 @@ class PayPalPayment implements PayPalTransactionInterface {
         $this->orderId = $orderId;
     }
 
-    public function getRequestBody(){
+    public function getRequestBody(): array {
         return [];
     }
 
-    public function getUrl(){
+    public function getUrl(): string {
         return self::PAYMENT_URL . $this->orderId . self::CAPTURE_PART;
     }
 }

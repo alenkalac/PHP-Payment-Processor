@@ -39,7 +39,7 @@ class PayPalModel implements IOnlineStoreModel {
         return $this->data->purchase_units[0]->payments->captures[0]->amount->currency_code;
     }
 
-    public function getGateway(){
+    public function getGateway(): string {
         return "PayPal";
     }
 
@@ -59,7 +59,7 @@ class PayPalModel implements IOnlineStoreModel {
         return $this->data->payer;
     }
 
-    public function getResponseData() {
+    public function getResponseData(): array {
         $d = [
             "orderId" => $this->getOrderId(),
             "transactionId" => $this->getTransactionId(),

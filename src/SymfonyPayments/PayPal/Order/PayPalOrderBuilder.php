@@ -1,6 +1,7 @@
 <?php
 namespace App\SymfonyPayments\PayPal\Order;
 
+use App\SymfonyPayments\Items\Item;
 use App\SymfonyPayments\PayPal\Interfaces\PayPalBuilderInterface;
 
 class PayPalOrderBuilder implements PayPalBuilderInterface {
@@ -48,11 +49,19 @@ class PayPalOrderBuilder implements PayPalBuilderInterface {
         return $this;
     }
 
-    public function addItem(PayPalItem $item) {
+    public function addItem(Item $item) {
         $this->payPalOrder->addItem($item);
     }
 
-    public function build() {
+    /**
+     * @param $items[]
+     */
+    public function addItems($items) {
+        foreach ($items as $item)
+            $this->addItem($item);
+    }
+
+    public function build(): PayPalOrder {
         return $this->payPalOrder;
     }
 }
