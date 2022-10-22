@@ -58,7 +58,12 @@ These examples are from a symfony project, and can be adapted to suit any langua
         $payerId = $data["payerID"];
         $orderId = $data["orderID"];
 
-        $response = $this->completePaymentClientBuilder->forPayPal($orderId, $payerId)->buildAndExecute();
+        $response = $this->completePaymentClientBuilder
+            ->forPayPal() //or forStripe($sessionId)
+            ->withOrderId($orderId) //not needed for stripe
+            ->withPayerId($payerId) //not needed for stripe
+            ->buildAndExecute();
+            
         if($response->getStatus() == "COMPLETE") {
             //handle successful payment.
             //query database for products associated with the orderId
