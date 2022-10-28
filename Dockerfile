@@ -22,8 +22,6 @@ COPY . .
 RUN PATH=$PATH:/app/vendor/bin:bin
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-RUN composer install --no-scripts --prefer-dist --no-interaction
-
 RUN chmod +x /app/entry-point.sh && sed -i -e 's/\r$//' /app/entry-point.sh
 
 ENTRYPOINT ["/app/entry-point.sh"]
