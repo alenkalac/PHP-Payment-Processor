@@ -4,7 +4,7 @@ namespace App\Payments\Processors;
 
 use App\Payments\IPaymentProcessor;
 use App\Payments\Items\RequestItemParser;
-use App\Payments\PayPal\PayPalClient;
+use App\Payments\PaymentFields;
 use Exception;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
@@ -33,17 +33,21 @@ class StripePaymentProcessor implements IPaymentProcessor {
 
         RequestItemParser::validate($data);
 
-        $currency = $data[PayPalClient::FIELD_CURRENCY];
+        $currency = $data[PaymentFields::FIELD_CURRENCY];
         $items = $this->processItems($data, $currency);
 
-        $curl = $data[PayPalClient::FIELD_CANCEL_URL];
-        $surl = $data[PayPalClient::FIELD_RETURN_URL];
+        $curl = $data[PaymentFields::FIELD_CANCEL_URL];
+        $surl = $data[PaymentFields::FIELD_RETURN_URL];
+        $description = key_exists("description", $data) ? $data["description"] : "";
 
         $session = Session::create([
             'line_items' => $items,
             'mode' => 'payment',
             'success_url' => $surl,
-            'cancel_url' => $curl
+            'cancel_url' => $curl,
+            'payment_intent_data' => [
+                'description' => $description
+            ]
         ]);
 
         return new JsonResponse($session->toArray());

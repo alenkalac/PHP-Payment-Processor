@@ -13,11 +13,6 @@ class PayPalClient {
 
     private const AUTH_URL = "/v1/oauth2/token";
 
-    public const FIELD_AMOUNT = "amount";
-    public const FIELD_CURRENCY = "currency";
-    public const FIELD_RETURN_URL = "return_url";
-    public const FIELD_CANCEL_URL = "cancel_url";
-
     public const FIELD_PAYER_ID = "payerID";
     public const FIELD_ORDER_ID = "orderID";
 

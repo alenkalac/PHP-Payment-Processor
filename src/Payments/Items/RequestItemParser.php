@@ -2,16 +2,16 @@
 
 namespace App\Payments\Items;
 
-use App\Payments\PayPal\PayPalClient;
+use App\Payments\PaymentFields;
 use Exception;
 
 class RequestItemParser {
 
     private static $required_fields = [
-        PayPalClient::FIELD_AMOUNT,
-        PayPalClient::FIELD_CURRENCY,
-        PayPalClient::FIELD_RETURN_URL,
-        PayPalClient::FIELD_CANCEL_URL
+        PaymentFields::FIELD_AMOUNT,
+        PaymentFields::FIELD_CURRENCY,
+        PaymentFields::FIELD_RETURN_URL,
+        PaymentFields::FIELD_CANCEL_URL,
     ];
 
     /**
