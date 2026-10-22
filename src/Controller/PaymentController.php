@@ -6,17 +6,14 @@ use App\Payments\PaymentProcessors;
 use App\Payments\Processors\PaymentProcessorNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class PaymentController extends AbstractController {
 
     /**
-     * @Route("/api/payment/{processor}", methods={"POST", "OPTIONS"})
-     * @param Request $request
-     * @param PaymentProcessors $paymentProcessors
-     * @return mixed
      * @throws PaymentProcessorNotFoundException
      */
+    #[Route('/api/payment/{processor}', methods: ['POST', 'OPTIONS'])]
     public function createPayment(Request $request, PaymentProcessors $paymentProcessors) {
         $processor = $request->get("processor");
 
@@ -24,12 +21,9 @@ class PaymentController extends AbstractController {
     }
 
     /**
-     * @Route("/api/payment/{processor}", methods={"PUT"})
-     * @param Request $request
-     * @param PaymentProcessors $paymentProcessors
-     * @return mixed
      * @throws PaymentProcessorNotFoundException
      */
+    #[Route('/api/payment/{processor}', methods: ['PUT'])]
     public function completePayment(Request $request, PaymentProcessors $paymentProcessors) {
         $processor = $request->get("processor");
 

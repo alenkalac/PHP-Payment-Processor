@@ -2,19 +2,20 @@
 namespace App\Controller\PayPalControllers;
 
 use App\Entity\PayPalOrder;
+use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class PayPalWebhookController extends AbstractController {
 
-    /**
-     * @Route("/webhook/paypal", methods={"POST"})
-     * @param Request $request
-     * @return Response
-     */
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+    }
+
+    #[Route('/webhook/paypal', methods: ['POST'])]
     public function payPalWebhook(Request $request): Response {
 
         $httpClient = new Client();
@@ -25,7 +26,7 @@ class PayPalWebhookController extends AbstractController {
         if($eventType == "CUSTOMER.DISPUTE.CREATED") {
             $transactionId = $data->resource->disputed_transactions[0]->seller_transaction_id;
 
-            $repo = $this->getDoctrine()->getRepository(PayPalOrder::class);
+            $repo = $this->entityManager->getRepository(PayPalOrder::class);
             $order = $repo->findOneBy([
                 "transactionId" => $transactionId
             ]);
@@ -45,7 +46,7 @@ class PayPalWebhookController extends AbstractController {
             $transactionId = $data->resource->disputed_transactions[0]->seller_transaction_id;
             $outcome = $data->resource->dispute_outcome->outcome_code;
 
-            $repo = $this->getDoctrine()->getRepository(PayPalOrder::class);
+            $repo = $this->entityManager->getRepository(PayPalOrder::class);
             $order = $repo->findOneBy([
                 "transactionId" => $transactionId
             ]);

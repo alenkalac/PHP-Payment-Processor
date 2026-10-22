@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ServerVariables;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method ServerVariables|null find($id, $lockMode = null, $lockVersion = null)

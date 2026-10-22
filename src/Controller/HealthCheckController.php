@@ -6,20 +6,15 @@ use App\Entity\HealthCheck;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class HealthCheckController extends AbstractController
 {
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @Route("/api/healthy")
-     */
+    #[Route('/api/healthy')]
     public function onHealthCheck(): Response {
         $healthCheckRepository = $this->entityManager->getRepository(HealthCheck::class);
 

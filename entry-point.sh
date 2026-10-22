@@ -3,8 +3,8 @@
 composer install --no-scripts --prefer-dist --no-interaction
 
 php /app/bin/console doctrine:database:create --if-not-exists
-php /app/bin/console doctrine:migration:diff -n
-php /app/bin/console doctrine:migration:migrate -n
+php /app/bin/console doctrine:migrations:diff -n
+php /app/bin/console doctrine:migrations:migrate -n
 
 chmod 777 -R /app/var
 php /app/bin/console cache:clear
